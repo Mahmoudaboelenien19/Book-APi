@@ -7,14 +7,11 @@ const express_1 = __importDefault(require("express"));
 const config_js_1 = require("./config.js");
 const mongoose_1 = __importDefault(require("mongoose"));
 const ErrorMiddleWare_js_1 = require("./middlewares/ErrorMiddleWare.js");
+const booksRoutes_js_1 = __importDefault(require("./handlers/booksRoutes.js"));
 mongoose_1.default.connect(config_js_1.MONGOOSE_URL);
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
-app.use("/", (_, res) => {
-    res.status(404).json({
-        message: "wrong route",
-    });
-});
+app.use("/books", booksRoutes_js_1.default);
 app.use(ErrorMiddleWare_js_1.ErrorMiddleWare);
 app.listen(config_js_1.PORT, () => {
     console.log("server starts");
