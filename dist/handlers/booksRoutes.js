@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const books_js_1 = require("../models/books.js");
+const Auth_js_1 = require("../middlewares/Auth.js");
 const bookModel = new books_js_1.Books();
 const getALlBooks = (_, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -81,7 +82,10 @@ const deleteBook = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 const BookRouter = (0, express_1.Router)();
-BookRouter.route("/").get(getALlBooks);
-BookRouter.route("/create").post(addBook);
-BookRouter.route("/:id").patch(updateBook).get(findBook).delete(deleteBook);
+BookRouter.route("/").get(Auth_js_1.auth, getALlBooks);
+BookRouter.route("/create").post(Auth_js_1.auth, addBook);
+BookRouter.route("/:id")
+    .patch(Auth_js_1.auth, updateBook)
+    .get(Auth_js_1.auth, findBook)
+    .delete(Auth_js_1.auth, deleteBook);
 exports.default = BookRouter;

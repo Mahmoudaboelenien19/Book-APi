@@ -2,6 +2,7 @@ import { Err } from "./../interfaces/Error.interface";
 import { NextFunction, Request, Response, Router } from "express";
 import { Books } from "../models/books.js";
 import { ObjectId } from "mongodb";
+import { auth } from "../middlewares/Auth.js";
 const bookModel = new Books();
 
 const getALlBooks = async (_: Request, res: Response, next: NextFunction) => {
@@ -77,7 +78,10 @@ const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
 
 const BookRouter = Router();
 
-BookRouter.route("/").get(getALlBooks);
-BookRouter.route("/create").post(addBook);
-BookRouter.route("/:id").patch(updateBook).get(findBook).delete(deleteBook);
+BookRouter.route("/").get(auth, getALlBooks);
+BookRouter.route("/create").post(auth, addBook);
+BookRouter.route("/:id")
+  .patch(auth, updateBook)
+  .get(auth, findBook)
+  .delete(auth, deleteBook);
 export default BookRouter;
