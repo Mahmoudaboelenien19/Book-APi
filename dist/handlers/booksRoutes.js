@@ -12,6 +12,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const books_js_1 = require("../models/books.js");
 const bookModel = new books_js_1.Books();
+const getALlBooks = (_, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield bookModel.index();
+        res.status(200).json({
+            message: "Books fetched successfully",
+            books: result,
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+});
 const addBook = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const book = req.body;
@@ -25,6 +37,51 @@ const addBook = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
         next(err);
     }
 });
+const updateBook = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const book = req.body;
+        const result = yield bookModel.update(book, req.params.id);
+        res.status(200).json({
+            message: "Book updated  successfully",
+            book: result,
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+});
+const findBook = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield bookModel.get(req.params.id);
+        res.status(200).json({
+            message: "Book is   successfully found",
+            book: result,
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+});
+const deleteBook = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield bookModel.delete(req.params.id);
+        if (result) {
+            res.status(200).json({
+                message: "Book is   successfully deleted",
+            });
+        }
+        else {
+            res.status(404).json({
+                message: "no book is  found",
+            });
+        }
+    }
+    catch (err) {
+        next(err);
+    }
+});
 const BookRouter = (0, express_1.Router)();
+BookRouter.route("/").get(getALlBooks);
 BookRouter.route("/create").post(addBook);
+BookRouter.route("/:id").patch(updateBook).get(findBook).delete(deleteBook);
 exports.default = BookRouter;
