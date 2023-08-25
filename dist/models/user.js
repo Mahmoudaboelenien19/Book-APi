@@ -22,7 +22,6 @@ class User {
     create(user) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(user);
             try {
                 const check = yield (0, CheckEmail_1.CheckEmail)(user.email);
                 if (!check) {

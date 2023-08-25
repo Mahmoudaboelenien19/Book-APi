@@ -76,7 +76,6 @@ class Books {
             try {
                 if (check) {
                     const res = yield books_js_1.default.findByIdAndDelete(id);
-                    console.log(res);
                     return res;
                 }
                 else {

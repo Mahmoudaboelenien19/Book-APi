@@ -64,7 +64,7 @@ const deleteBook = async (req: Request, res: Response, next: NextFunction) => {
     const result = await bookModel.delete(req.params.id as unknown as ObjectId);
     if (result) {
       res.status(200).json({
-        message: "Book is   successfully deleted",
+        message: "Book is  successfully deleted",
       });
     } else {
       res.status(404).json({

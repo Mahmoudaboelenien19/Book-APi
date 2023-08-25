@@ -14,7 +14,7 @@ app.use(cookieParser());
 app.use("/books", BookRouter);
 app.use("/users", userRouter);
 app.use("/", (_: Request, res: Response) => {
-  throw new Error(" this route not found");
+  throw new Error(" Enter a Correct Route ");
 });
 app.use(ErrorMiddleWare);
 app.listen(PORT, () => {

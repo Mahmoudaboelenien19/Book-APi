@@ -12,8 +12,8 @@ const auth = (req, res, next) => {
         const authHearders = req.headers.authorization;
         if (authHearders) {
             const token = authHearders.split(" ")[1];
-            const decode = jsonwebtoken_1.default.verify(token, config_js_1.ACCESS_TOKEN_SECRET);
-            if (decode) {
+            const user = jsonwebtoken_1.default.verify(token, config_js_1.ACCESS_TOKEN_SECRET);
+            if (user) {
                 next();
             }
             else {
@@ -21,21 +21,24 @@ const auth = (req, res, next) => {
             }
         }
         else {
-            throw new Error("expired token");
+            throw new Error("not Authorized !");
         }
     }
     catch (err) {
         if (err.name === "TokenExpiredError") {
             const refToken = req.headers["ref_token"];
             if (refToken) {
-                const decode = jsonwebtoken_1.default.verify(refToken, config_js_1.REFRESH_TOKEN_SECRET);
-                if (decode === null || decode === void 0 ? void 0 : decode.email) {
-                    (0, generateTokens_js_1.generateTokens)(decode.email, res);
+                const user = jsonwebtoken_1.default.verify(refToken, config_js_1.REFRESH_TOKEN_SECRET);
+                if (user === null || user === void 0 ? void 0 : user.email) {
+                    (0, generateTokens_js_1.generateTokens)(user.email, res);
                     next();
                 }
                 else {
                     throw new Error("Invalid token");
                 }
+            }
+            else {
+                throw new Error("add refresh token as ref_token header");
             }
         }
         else {

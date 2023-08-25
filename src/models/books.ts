@@ -57,7 +57,7 @@ export class Books {
     try {
       if (check) {
         const res = await bookCollection.findByIdAndDelete(id);
-        console.log(res);
+
         return res;
       } else {
         throw new Error("invaild  book id");

@@ -7,7 +7,6 @@ import { BCRYPT_PASS } from "../config";
 
 class User {
   async create(user: UserInterface) {
-    console.log(user);
     try {
       const check = await CheckEmail(user.email);
       if (!check) {

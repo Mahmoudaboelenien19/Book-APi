@@ -17,7 +17,7 @@ app.use((0, cookie_parser_1.default)());
 app.use("/books", booksRoutes_js_1.default);
 app.use("/users", usersRoutes_js_1.default);
 app.use("/", (_, res) => {
-    throw new Error(" this route not found");
+    throw new Error(" Enter a Correct Route ");
 });
 app.use(ErrorMiddleWare_js_1.ErrorMiddleWare);
 app.listen(config_js_1.PORT, () => {

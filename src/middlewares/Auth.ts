@@ -10,33 +10,32 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
     if (authHearders) {
       const token = authHearders!.split(" ")[1];
 
-      const decode = Jwt.verify(
-        token,
-        ACCESS_TOKEN_SECRET as unknown as string
-      );
-      if (decode) {
+      const user = Jwt.verify(token, ACCESS_TOKEN_SECRET as unknown as string);
+      if (user) {
         next();
       } else {
         throw new Error("Invalid token");
       }
     } else {
-      throw new Error("expired token");
+      throw new Error("not Authorized !");
     }
   } catch (err) {
     if ((err as Error).name === "TokenExpiredError") {
       const refToken = req.headers["ref_token"];
 
       if (refToken) {
-        const decode = Jwt.verify(
+        const user = Jwt.verify(
           refToken as unknown as string,
           REFRESH_TOKEN_SECRET as unknown as string
         ) as unknown as { email: string };
-        if (decode?.email) {
-          generateTokens(decode.email, res);
+        if (user?.email) {
+          generateTokens(user.email, res);
           next();
         } else {
           throw new Error("Invalid token");
         }
+      } else {
+        throw new Error("add refresh token as ref_token header");
       }
     } else {
       throw new Error((err as Error).message);

@@ -68,7 +68,7 @@ const deleteBook = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         const result = yield bookModel.delete(req.params.id);
         if (result) {
             res.status(200).json({
-                message: "Book is   successfully deleted",
+                message: "Book is  successfully deleted",
             });
         }
         else {

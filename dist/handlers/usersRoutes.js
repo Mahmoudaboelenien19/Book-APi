@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const user_1 = require("../models/user");
 const generateTokens_1 = require("../lib/generateTokens");
+const Auth_1 = require("../middlewares/Auth");
 const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = req.body;
@@ -45,7 +46,26 @@ const authenticate = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         next(err);
     }
 });
+const logout = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        res.clearCookie("access_token", {
+            httpOnly: true,
+            secure: true,
+        });
+        res.clearCookie("refresh_token", {
+            httpOnly: true,
+            secure: true,
+        });
+        res.status(200).json({
+            message: "you successfully logged out",
+        });
+    }
+    catch (err) {
+        next(err);
+    }
+});
 const userRouter = (0, express_1.Router)();
 userRouter.post("/create", createUser);
 userRouter.post("/authenticate", authenticate);
+userRouter.delete("/logout", Auth_1.auth, logout);
 exports.default = userRouter;

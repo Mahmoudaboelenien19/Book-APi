@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { userModel } from "../models/user";
 import { generateTokens } from "../lib/generateTokens";
+import { auth } from "../middlewares/Auth";
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.body;
@@ -36,7 +37,26 @@ const authenticate = async (
     next(err);
   }
 };
+
+const logout = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    res.clearCookie("access_token", {
+      httpOnly: true,
+      secure: true,
+    });
+    res.clearCookie("refresh_token", {
+      httpOnly: true,
+      secure: true,
+    });
+    res.status(200).json({
+      message: "you successfully logged out",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 const userRouter = Router();
 userRouter.post("/create", createUser);
 userRouter.post("/authenticate", authenticate);
+userRouter.delete("/logout", auth, logout);
 export default userRouter;
